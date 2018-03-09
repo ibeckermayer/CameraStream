@@ -127,12 +127,12 @@ vis_util.visualize_boxes_and_labels_on_image_array(
     instance_masks=output_dict.get('detection_masks'),
     use_normalized_coordinates=True,
     line_thickness=8)
-plt.figure(figsize=IMAGE_SIZE)
-plt.imshow(image_np)
-plt.show()
+# plt.figure(figsize=IMAGE_SIZE)
+# plt.imshow(image_np)
+# plt.show()
 
 # keep below in case it's necessary for continuous view (video)
-# cv2.imshow('frame', image_np)
-# if cv2.waitKey(0) == ord('q'):
-#     cv2.destroyAllWindows()
-# cap.release()
+cv2.imshow('frame', cv2.cvtColor(image_np, cv2.COLOR_RGB2BGR))
+if cv2.waitKey(0) == ord('q'):
+    cv2.destroyAllWindows()
+cap.release()
