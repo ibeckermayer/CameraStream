@@ -56,12 +56,6 @@ def load_image_into_numpy_array(image):
     return np.array(image.getdata()).reshape(
         (im_height, im_width, 3)).astype(np.uint8)
 
-# For the sake of simplicity we will use only 2 images:
-# image1.jpg
-# image2.jpg
-# If you want to test the code with your images, just add path to the images to the TEST_IMAGE_PATHS.
-PATH_TO_TEST_IMAGES_DIR = 'test_images'
-TEST_IMAGE_PATHS = [ os.path.join(PATH_TO_TEST_IMAGES_DIR, 'image{}.jpg'.format(i)) for i in range(1, 4) ]
 # Size, in inches, of the output images.
 IMAGE_SIZE = (12, 8)
 
@@ -111,42 +105,18 @@ def run_inference_for_single_image(image, graph):
                 output_dict['detection_masks'] = output_dict['detection_masks'][0]
     return output_dict
 
-# for image_path in TEST_IMAGE_PATHS:
-#     image = Image.open(image_path)
-#     # the array based representation of the image will be used later in order to prepare the
-#     # result image with boxes and labels on it.
-#     image_np = load_image_into_numpy_array(image)
-#     # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
-#     image_np_expanded = np.expand_dims(image_np, axis=0)
-#     # Actual detection.
-#     output_dict = run_inference_for_single_image(image_np, detection_graph)
-#     # Visualization of the results of a detection.
-#     vis_util.visualize_boxes_and_labels_on_image_array(
-#         image_np,
-#         output_dict['detection_boxes'],
-#         output_dict['detection_classes'],
-#         output_dict['detection_scores'],
-#         category_index,
-#         instance_masks=output_dict.get('detection_masks'),
-#         use_normalized_coordinates=True,
-#         line_thickness=8)
-#     plt.figure(figsize=IMAGE_SIZE)
-#     plt.imshow(image_np)
-# plt.show()    
-
+# start the video capture
 cap = cv2.VideoCapture('http://192.168.25.1:8080/?action=stream')
+
+# capture a single frame
 ret, frame = cap.read()
 
-# for image_path in TEST_IMAGE_PATHS:
-    # image = Image.open(image_path)
-    # # the array based representation of the image will be used later in order to prepare the
-    # # result image with boxes and labels on it.
-    # image_np = load_image_into_numpy_array(image)
-image_np = frame
-# Expand dimensions since the model expects images to have shape: [1, None, None, 3]
-# image_np_expanded = np.expand_dims(image_np, axis=0)
+# the model takes RGB, whereas cv2 returns BGR
+image_np = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
 # Actual detection.
 output_dict = run_inference_for_single_image(image_np, detection_graph)
+
 # Visualization of the results of a detection.
 vis_util.visualize_boxes_and_labels_on_image_array(
     image_np,
@@ -157,9 +127,12 @@ vis_util.visualize_boxes_and_labels_on_image_array(
     instance_masks=output_dict.get('detection_masks'),
     use_normalized_coordinates=True,
     line_thickness=8)
-# plt.figure(figsize=IMAGE_SIZE)
-# plt.imshow(image_np)
-# plt.show()
-cv2.imshow('frame', image_np)
-cv2.waitKey()
-cap.release()
+plt.figure(figsize=IMAGE_SIZE)
+plt.imshow(image_np)
+plt.show()
+
+# keep below in case it's necessary for continuous view (video)
+# cv2.imshow('frame', image_np)
+# if cv2.waitKey(0) == ord('q'):
+#     cv2.destroyAllWindows()
+# cap.release()
