@@ -128,9 +128,6 @@ while(True):
         instance_masks=output_dict.get('detection_masks'),
         use_normalized_coordinates=True,
         line_thickness=8)
-    # plt.figure(figsize=IMAGE_SIZE)
-    # plt.imshow(image_np)
-    # plt.show()
 
     cv2.imshow('image_np', cv2.cvtColor(image_np, cv2.COLOR_RGB2BGR))
     if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -138,6 +135,3 @@ while(True):
 
 cap.release()
 cv2.destroyAllWindows()
-# if cv2.waitKey(0) == ord('q'):
-#     cv2.destroyAllWindows()
-# cap.release()
