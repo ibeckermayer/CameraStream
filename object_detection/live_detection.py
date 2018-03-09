@@ -108,31 +108,36 @@ def run_inference_for_single_image(image, graph):
 # start the video capture
 cap = cv2.VideoCapture('http://192.168.25.1:8080/?action=stream')
 
-# capture a single frame
-ret, frame = cap.read()
+while(True):
+    # capture a single frame
+    ret, frame = cap.read()
 
-# the model takes RGB, whereas cv2 returns BGR
-image_np = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    # the model takes RGB, whereas cv2 returns BGR
+    image_np = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-# Actual detection.
-output_dict = run_inference_for_single_image(image_np, detection_graph)
+    # Actual detection.
+    output_dict = run_inference_for_single_image(image_np, detection_graph)
 
-# Visualization of the results of a detection.
-vis_util.visualize_boxes_and_labels_on_image_array(
-    image_np,
-    output_dict['detection_boxes'],
-    output_dict['detection_classes'],
-    output_dict['detection_scores'],
-    category_index,
-    instance_masks=output_dict.get('detection_masks'),
-    use_normalized_coordinates=True,
-    line_thickness=8)
-# plt.figure(figsize=IMAGE_SIZE)
-# plt.imshow(image_np)
-# plt.show()
+    # Visualization of the results of a detection.
+    vis_util.visualize_boxes_and_labels_on_image_array(
+        image_np,
+        output_dict['detection_boxes'],
+        output_dict['detection_classes'],
+        output_dict['detection_scores'],
+        category_index,
+        instance_masks=output_dict.get('detection_masks'),
+        use_normalized_coordinates=True,
+        line_thickness=8)
+    # plt.figure(figsize=IMAGE_SIZE)
+    # plt.imshow(image_np)
+    # plt.show()
 
-# keep below in case it's necessary for continuous view (video)
-cv2.imshow('frame', cv2.cvtColor(image_np, cv2.COLOR_RGB2BGR))
-if cv2.waitKey(0) == ord('q'):
-    cv2.destroyAllWindows()
+    cv2.imshow('image_np', cv2.cvtColor(image_np, cv2.COLOR_RGB2BGR))
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
 cap.release()
+cv2.destroyAllWindows()
+# if cv2.waitKey(0) == ord('q'):
+#     cv2.destroyAllWindows()
+# cap.release()
