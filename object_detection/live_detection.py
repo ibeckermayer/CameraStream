@@ -132,7 +132,7 @@ while(True):
     # plt.imshow(image_np)
     # plt.show()
 
-    cv2.imshow('frame', cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
+    cv2.imshow('image_np', cv2.cvtColor(image_np, cv2.COLOR_RGB2BGR))
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
